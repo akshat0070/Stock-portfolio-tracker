@@ -1,0 +1,84 @@
+# Stock Portfolio Tracker
+
+stock_prices = {
+    "AAPL": 180,
+    "TSLA": 250,
+    "GOOGL": 150,
+    "MSFT": 420,
+    "AMZN": 190
+}
+
+portfolio = {}
+
+print("===== STOCK PORTFOLIO TRACKER =====")
+print("Available Stocks:", ", ".join(stock_prices.keys()))
+
+while True:
+    stock = input("\nEnter stock name (or 'done' to finish): ").upper()
+
+    if stock == "DONE":
+        break
+
+    if stock not in stock_prices:
+        print("Stock not available!")
+        continue
+
+    try:
+        quantity = int(input("Enter quantity: "))
+
+        if quantity <= 0:
+            print("Quantity must be greater than 0.")
+            continue
+
+        # Add stock to portfolio
+        if stock in portfolio:
+            portfolio[stock] += quantity
+        else:
+            portfolio[stock] = quantity
+
+        print(f"{quantity} shares of {stock} added.")
+
+    except ValueError:
+        print("Please enter a valid quantity.")
+
+
+# Display portfolio
+print("\n===== YOUR PORTFOLIO =====")
+
+total_investment = 0
+
+for stock, quantity in portfolio.items():
+    price = stock_prices[stock]
+    investment = price * quantity
+    total_investment += investment
+
+    print(f"{stock}: {quantity} shares × ${price} = ${investment}")
+
+print("--------------------------------")
+print(f"Total Investment: ${total_investment}")
+
+
+# Save result to a text file
+save = input("\nDo you want to save the portfolio? (yes/no): ").lower()
+
+if save == "yes":
+    with open("portfolio.txt", "w") as file:
+        file.write("===== STOCK PORTFOLIO =====\n\n")
+
+        for stock, quantity in portfolio.items():
+            price = stock_prices[stock]
+            investment = price * quantity
+
+            file.write(
+                f"{stock}: {quantity} shares × ${price} = ${investment}\n"
+            )
+
+        file.write("\n----------------------------\n")
+        file.write(f"Total Investment: ${total_investment}\n")
+
+    print("Portfolio saved successfully in portfolio.txt")
+
+else:
+    print("Portfolio was not saved.")
+
+print("\nThank you for using Stock Portfolio Tracker!")
